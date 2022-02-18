@@ -96,7 +96,7 @@ pytz-deprecation-shim==0.1.0.post0
 pyzmq==22.3.0
 requests==2.27.1
 scikit-learn==1.0.2
-scipy==1.8.0
+scipy==1.7.3
 seaborn==0.11.2
 selenium==4.1.0
 Send2Trash==1.8.0
@@ -134,4 +134,3 @@ webdriver-manager==3.5.2
 webencodings==0.5.1
 widgetsnbextension==3.5.2
 wsproto==1.0.0
-xgboost==1.5.2
