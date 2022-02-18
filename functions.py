@@ -8,6 +8,7 @@ import plotly.express as px
 import shap
 from math import log, floor
 
+#API_ROOT = 'http://127.0.0.1:8000'
 API_ROOT = 'https://leoguillaume-credit-scoring.herokuapp.com'
 
 @st.cache
@@ -18,10 +19,11 @@ def get_user_list():
 
     return user_list
 
-@st.cache
-def get_prediction(user_id):
+#@st.cache
+def get_prediction(user_id, amount, annuity):
 
-    json_response = requests.get(os.path.join(API_ROOT, 'model', 'predict', user_id)).json()
+    request = {'amount': amount, 'annuity': annuity}
+    json_response = requests.post(os.path.join(API_ROOT, 'model', 'predict', user_id), json=request).json()
     negative_proba = json_response['negative_pred']
     positive_proba = json_response['positive_pred']
 
@@ -127,9 +129,10 @@ def get_categorical_chart(negative_dist, positive_dist, feature_name):
     return fig
 
 @st.cache
-def get_shap_values(user_id):
+def get_shap_values(user_id, amount, annuity):
     
-    json_response = requests.get(os.path.join(API_ROOT, 'model', 'shap_values', user_id)).json()
+    request = {'amount': amount, 'annuity': annuity}
+    json_response = requests.post(os.path.join(API_ROOT, 'model', 'shap_values', user_id), json=request).json()
     explained_values = np.array(json_response['explained_values']).reshape(1, -1)
     expected_value = json_response['expected_value']
     user_data = pd.Series(json_response['user_data']).replace('null', np.NaN)

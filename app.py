@@ -1,4 +1,7 @@
 from functions import *
+# CONFIG
+
+st.set_page_config(page_title='Credit Scoring Dashboard', page_icon='💸')
 
 # DATA
 user_list = get_user_list()
@@ -10,6 +13,7 @@ feature_list.remove('SK_ID_CURR')
 feature_list.remove('TARGET')
 
 # SIDEBAR
+
 with st.sidebar:
     st.image('https://cdn.iconscout.com/icon/free/png-256/user-1648810-1401302.png', width=100)
     st.title('User selection')
@@ -21,7 +25,7 @@ with st.sidebar:
     st.table(user_infos)
 
     st.markdown('---')
-    st.markdown('[![Github - App](https://img.shields.io/badge/Github-App-FF0000?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_api) [![Github - API](https://img.shields.io/badge/Github-API-1E90FF?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_api) [![Github - Model](https://img.shields.io/badge/Github-Model-32CD32?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_api)', unsafe_allow_html=True)
+    st.markdown('[![Github - App](https://img.shields.io/badge/Github-App-FF0000?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_app) [![Github - API](https://img.shields.io/badge/Github-API-1E90FF?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_api) [![Github - Model](https://img.shields.io/badge/Github-Model-32CD32?logo=github)](https://github.com/leoguillaume/home_credit_default_risk_model)', unsafe_allow_html=True)
 
 # MAIN
 
@@ -29,8 +33,14 @@ st.title('Scoring Credit Dashboard')
 st.markdown('---')
 
 st.header('🔮 Credit risk prediction')
+amount, annuity = 1, 1
 
-negative_proba, positive_proba = get_prediction(selected_user)
+with st.expander('Change credit application'):
+
+    amount = st.slider(label='% of the amount requested', min_value=0.0, max_value=200.0, value=100.0, step=10.0) / 100
+    annuity = st.slider(label='% of the annuity requested', min_value=0.0, max_value=200.0, value=100.0, step=10.0) / 100
+
+negative_proba, positive_proba = get_prediction(selected_user, amount, annuity)
 
 col1, col2 = st.columns(2)
 
@@ -41,7 +51,7 @@ with col2:
     st.error(f'Insolvant probability : {positive_proba:.0%}')
 
 if st.button('View feature importances with shap'):
-    explained_values, expected_value, user_data = get_shap_values(selected_user)
+    explained_values, expected_value, user_data = get_shap_values(selected_user, amount, annuity)
     st_shap(shap.force_plot(expected_value, explained_values, user_data))
 
 st.markdown('---')
