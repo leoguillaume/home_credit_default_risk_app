@@ -69,7 +69,6 @@ negative_dist, positive_dist = get_feature_data(selected_feature)
 user_data = get_user_data(selected_user)
 user_feature_data = user_data[feature_dict[selected_feature]['name']]
 
-
 feature_data = pd.Series(np.concatenate([negative_dist, positive_dist]), name = feature_dict[selected_feature]['name'])
 delta, delta_color = get_delta(user_feature_data, selected_feature, feature_dict, feature_data)
 feature_name = feature_dict[selected_feature]['name'].capitalize().replace('_', ' ')
